@@ -2,9 +2,9 @@
 
 import sys
 import spotipy
+import spotipy.oauth2 as oauth2
 import spotipy.util as util
 import json
-
 
 
 def show_tracks(tracks):
@@ -23,11 +23,15 @@ if __name__ == '__main__':
         print("Whoops, need your username!")
         print("usage: python3 user_playlists.py [username]")
         sys.exit()
+    credentials = oauth2.SpotifyClientCredentials(
+        client_id=config['SPOTIPY_CLIENT_ID'],
+        client_secret=config['SPOTIPY_CLIENT_SECRET'], )
 
-    token = util.prompt_for_user_token(username,
-                                       client_id=config['SPOTIPY_CLIENT_ID'],
-                                       client_secret=config['SPOTIPY_CLIENT_SECRET'],
-                                       redirect_uri=config['SPOTIPY_REDIRECT_URI'])
+    token = credentials.get_access_token()
+    # token = util.prompt_for_user_token(username,
+    #                                    client_id=config['SPOTIPY_CLIENT_ID'],
+    #                                    client_secret=config['SPOTIPY_CLIENT_SECRET'],
+    #                                    redirect_uri=config['SPOTIPY_REDIRECT_URI'])
 
     if token:
         sp = spotipy.Spotify(auth=token)
