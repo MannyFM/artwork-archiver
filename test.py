@@ -3,6 +3,8 @@
 import sys
 import spotipy
 import spotipy.util as util
+import json
+
 
 
 def show_tracks(tracks):
@@ -12,6 +14,9 @@ def show_tracks(tracks):
 
 
 if __name__ == '__main__':
+    with open('config.json') as json_data_file:
+        config = json.load(json_data_file)
+
     if len(sys.argv) > 1:
         username = sys.argv[1]
     else:
@@ -19,7 +24,10 @@ if __name__ == '__main__':
         print("usage: python3 user_playlists.py [username]")
         sys.exit()
 
-    token = util.prompt_for_user_token(username)
+    token = util.prompt_for_user_token(username,
+                                       client_id=config['SPOTIPY_CLIENT_ID'],
+                                       client_secret=config['SPOTIPY_CLIENT_SECRET'],
+                                       redirect_uri=config['SPOTIPY_REDIRECT_URI'])
 
     if token:
         sp = spotipy.Spotify(auth=token)
