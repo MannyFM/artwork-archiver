@@ -3,7 +3,6 @@
 import sys
 import spotipy
 import spotipy.oauth2 as oauth2
-import spotipy.util as util
 import json
 
 
@@ -28,10 +27,6 @@ if __name__ == '__main__':
         client_secret=config['SPOTIPY_CLIENT_SECRET'], )
 
     token = credentials.get_access_token()
-    # token = util.prompt_for_user_token(username,
-    #                                    client_id=config['SPOTIPY_CLIENT_ID'],
-    #                                    client_secret=config['SPOTIPY_CLIENT_SECRET'],
-    #                                    redirect_uri=config['SPOTIPY_REDIRECT_URI'])
 
     if token:
         sp = spotipy.Spotify(auth=token)
