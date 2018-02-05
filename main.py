@@ -5,8 +5,6 @@ from typing import List
 import spotipy
 import spotipy.util as util
 
-from models import normalize_album
-
 sp = None
 
 
@@ -18,7 +16,6 @@ def show_tracks(tracks: dict):
 
 def show_albums_json(albums: list):
     for i, item in enumerate(albums):
-        # album = item['album']
         album = item
         print("   %2d %32.32s %s" % (i, album['artists'][0]['name'], album['name']))
 
@@ -35,14 +32,12 @@ def get_all_saved_albums():
     albums.extend(results['items'])
     while results['next']:
         results = sp.next(results)
-        # albums.extend(normalize_album(results['items']))
         albums.extend(results['items'])
     return albums
 
 
 def get_albums_from_tracks(max_album_count: int = 200) -> List[tuple]:
     global sp
-    # albums = []
     results = sp.current_user_saved_tracks(limit=50)
     results_set = set()
     total = 0
@@ -50,7 +45,6 @@ def get_albums_from_tracks(max_album_count: int = 200) -> List[tuple]:
     for item in results['items']:
         cur = item['track']['album']
         album = normalize_album(cur)
-        # albums.append(cur)
         results_set.add(album)
         total += 1
 
@@ -62,14 +56,10 @@ def get_albums_from_tracks(max_album_count: int = 200) -> List[tuple]:
         for item in results['items']:
             cur = item['track']['album']
             album = normalize_album(cur)
-            # albums.append(cur)
             results_set.add(album)
             total += 1
-    # print(len(albums))
-    # print(len(results_set))
     print("\rThere was total {} tracks and set is {} length".format(total, len(results_set)))
     return list(results_set)
-    # return albums
 
 
 def main():
@@ -95,7 +85,7 @@ def main():
 
     if token:
         sp = spotipy.Spotify(auth=token)
-        albums = get_albums_from_tracks(max_album_count=200)
+        albums = get_albums_from_tracks(max_album_count=2000)
         # print(len(albums))
         # show_albums(albums)
         with open('dump.json', 'w') as fp:
@@ -103,6 +93,16 @@ def main():
             # json.dump(albums, fp, iterable_as_array=True)
     else:
         print("Can't get token for", username)
+
+
+def normalize_album(data: json) -> tuple:
+    res = (
+        data['artists'][0]['name'],
+        data['name'],
+        data['images'][2]['url']
+        # (image['url'] for image in data['images']),
+    )
+    return res
 
 
 if __name__ == '__main__':
