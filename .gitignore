@@ -1,6 +1,7 @@
 .cache-*
 dump.json
 output
+test.py
 
 # Created by https://www.gitignore.io/api/osx,python,intellij
 

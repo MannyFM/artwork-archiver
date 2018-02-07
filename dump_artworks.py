@@ -7,7 +7,7 @@ global working_dir
 
 
 def dump_file(item):
-    filename = "{}-{}.jpeg".format(working_dir, item[0], item[1])
+    filename = "{}-{}.jpeg".format(item[0], item[1])
     filename = filename.replace(" ", "_")
     filename = filename.replace("/", "_")
     filename = filename.replace("\\", "_")
@@ -26,6 +26,7 @@ def main():
     for i, item in enumerate(data):
         print("\rDownloading {}/{}".format(i, size), end="")
         dump_file(item)
+    print("\nYeah")
 
 
 if __name__ == '__main__':
